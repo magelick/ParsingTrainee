@@ -30,14 +30,6 @@ repos:
           - python  # .py-files
         pass_filenames: false  # Filename transfer for that hook or not
 
-      #      - id: tests  # Identifier of hook
-      #        name: tests  # Name of hook
-      #        entry: pytest -v . # Command for start work hook
-      #        language: system  # Hook will work with user command line system
-      #        types:  # Define type of file for checking
-      #          - python  # .py-files
-      #        pass_filenames: false  # Filename transfer for that hook or not
-
       - id: mypy  # Identifier of hook
         name: mypy  # Name of hook
         entry: mypy --ignore-missing-imports --explicit-package-bases . # Command for start work hook
