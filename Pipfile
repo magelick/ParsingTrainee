@@ -12,12 +12,12 @@ black = "*"
 pytest = "*"
 requests = "*"
 beautifulsoup4 = "*"
-confluent-kafka = "*"
 redis = "*"
 fastapi = "*"
 uvicorn = {extras = ["standart"], version = "*"}
 pre-commit = "*"
 pydantic-settings = "*"
+kafka-python = "*"
 
 [dev-packages]
 
