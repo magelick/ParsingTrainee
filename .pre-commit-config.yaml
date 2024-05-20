@@ -6,7 +6,6 @@ repos:
     hooks:
     # basic hooks
       - id: trailing-whitespace
-      - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
         args: [— maxkb=1500]
