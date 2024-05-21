@@ -9,3 +9,6 @@ class Settings(BaseSettings):
     # MongoDB environments
     MONGODB_HOST: str
     MONGODB_PORT: int
+    # Twitch environments
+    TWITCH_CLIENT_ID: str
+    TWITCH_CLIENT_SECRET: str
