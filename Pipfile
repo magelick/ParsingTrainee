@@ -17,6 +17,8 @@ fastapi = "*"
 uvicorn = {extras = ["standart"], version = "*"}
 pre-commit = "*"
 pydantic-settings = "*"
+lxml = "*"
+types-requests = "*"
 kafka-python = "*"
 
 [dev-packages]
