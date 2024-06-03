@@ -38,7 +38,7 @@ def get_all_sneakers(page_int: int) -> Dict:
         # add all values in response data
         data[brand] = {
             "model": model.replace("Кроссовки", "").strip(),
-            "price": price,
+            "price": price.replace("р.", ""),
         }
     # return response data
     return data
@@ -91,7 +91,7 @@ def get_sneaker_by_href(href: str) -> Dict:
     :return:
     """
     # create url and parsing them
-    url = f"https://www.lamoda.by/{href}"
+    url = f"https://www.lamoda.by/{href.lower()}"
     response = get_url(url=url)
     soup = get_bs4_object(url=response)
     # get lists which includes title and attribute values
@@ -144,7 +144,7 @@ def get_sneaker_by_article(article: str) -> Dict:
     :return:
     """
     # create url and parsing them
-    url = f"https://www.lamoda.by/p/{article}"
+    url = f"https://www.lamoda.by/p/{article.lower()}"
     response = get_url(url=url)
     soup = get_bs4_object(url=response)
     # get lists which includes title and attribute values

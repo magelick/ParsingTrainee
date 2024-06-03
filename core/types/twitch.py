@@ -1,3 +1,5 @@
+from typing import List, Dict
+
 from pydantic import Field
 
 from core.types.base import DTO
@@ -11,23 +13,65 @@ class TwitchBasic(DTO):
     ...
 
 
-class TwitchTokens(TwitchBasic):
+class TwitchTokensDetail(TwitchBasic):
     """
     Schema of get twitch tokens
     """
 
-    # access token
     access_token: str = Field(default=..., title="Access Token")
-    # time expiring
+
     expires_in: int = Field(default=..., title="Time expiring")
-    # token id
-    id_token: int = Field(default=..., title="Token ID")
-    # refresh token
+
+    id_token: str = Field(default=None, title="Token ID")
+
     refresh_token: str = Field(default=..., title="Refresh token")
-    # scope
+
     scope: list = Field(default=..., title="Scope")
-    # token type
-    token_type: str = "bearer"
+
+    token_type: str = Field(default="bearer", title="Token Type")
+
+
+class TwitchUserInfo(TwitchBasic):
+    """
+    Schema of get user info
+    """
+
+    id: str = Field(default=..., title="ID")
+    login: str = Field(default=..., title="Login")
+    display_name: str = Field(default=..., title="Display Name")
+    type: str = Field(default=None, title="Display Name")
+    broadcaster_type: str = Field(default=..., title="Broadcaster Type")
+    description: str = Field(default=..., title="Description")
+    profile_image_url: str = Field(default=..., title="Profile Image Url")
+    offline_image_url: str = Field(default=..., title="Profile Image Url")
+    view_count: int = Field(default=..., title="View Count")
+    email: str = Field(default=None, title="Email")
+    created_at: str = Field(default=..., title="Created At")
+
+
+class TwitchUserDetail(TwitchBasic):
+    """
+    Schema of get user detail
+    """
+
+    data: List[TwitchUserInfo] = Field(default=..., title="Data User Detail")
+
+
+class TwitchGameDetailInfo(TwitchBasic):
+    """
+    Schema of get game detail info
+    """
+
+    id: str = Field(
+        default=...,
+        title="ID",
+    )
+
+    name: str = Field(default=..., title="Name")
+
+    box_art_url: str = Field(default=..., title="Box art url")
+
+    igdb_id: str = Field(default=..., title="Igdb_id")
 
 
 class TwitchGameDetail(TwitchBasic):
@@ -35,17 +79,8 @@ class TwitchGameDetail(TwitchBasic):
     Schema of get game detail
     """
 
-    # game id
-    id: str = Field(default=..., title="ID", description="ID some game")
-    # game name
-    name: str = Field(default=..., title="Name", description="Name some game")
-    # game box art url
-    box_art_url: str = Field(
-        default=..., title="Box art url", description="Box art url some game"
-    )
-    # game igdb_id
-    igdb_id: str = Field(
-        default=..., title="Igdb_id", description="Igdb_id some game"
+    data: List[TwitchGameDetailInfo] = Field(
+        default=..., title="Data Game Detail"
     )
 
 
@@ -54,243 +89,396 @@ class TwitchTopGameDetail(TwitchGameDetail):
     Schema of get top game detail
     """
 
-    ...
+    pagination: Dict = Field(default=..., title="Pagination")
 
 
-class TwitchChannelInformationDetail(TwitchBasic):
+class TwitchGameAnalyticInfo(TwitchBasic):
+    """
+    Schema fo get game analytic info
+    """
+
+    game_id: str = Field(default=..., title="Game ID")
+    url: str = Field(default=..., title="URL")
+    type: str = Field(default="overview_v2", title="Type")
+    date_range: dict = Field(default=..., title="Date Range")
+
+
+class TwitchGameAnalyticDetail(TwitchBasic):
+    """
+    Schema of get game analytic
+    """
+
+    data: List[TwitchGameAnalyticInfo] = Field(
+        default=..., title="Data Game Analytic Detail"
+    )
+    pagination: Dict = Field(default=..., title="Pagination")
+
+
+class TwitchChannelInformationInfo(TwitchBasic):
     """
     Schema of get Channel information
     """
 
-    # broadcaster id
     broadcaster_id: str = Field(default=..., title="Broadcaster ID")
-    # broadcaster login
+
     broadcaster_login: str = Field(default=..., title="Broadcaster Login")
-    # broadcaster name
+
     broadcaster_name: str = Field(default=..., title="Broadcaster Name")
-    # broadcaster language
+
     broadcaster_language: str = Field(
-        default=..., title="Broadcaster language"
+        default=..., title="Broadcaster Language"
     )
-    # game name
-    game_name: str = Field(default=..., title="Game name")
-    # game id
+
+    game_name: str = Field(default=..., title="Game Name")
+
     game_id: str = Field(default=..., title="Game ID")
-    # title
+
     title: str = Field(default=..., title="Title")
-    # delay
+
     delay: int = Field(default=..., title="Delay")
-    # tags
+
     tags: list = Field(default=..., title="Tags")
-    # content classification labels
+
     content_classification_labels: list = Field(
-        default=..., title="content classification labels"
+        default=..., title="Content Classification Labels"
     )
-    # branded content
+
     is_branded_content: bool = Field(default=..., title="Branded content")
+
+
+class TwitchChannelInformationDetail(TwitchBasic):
+    """
+    Schema of Channel Information Detail
+    """
+
+    data: List[TwitchChannelInformationInfo] = Field(
+        default=..., title="Data Channel Information Detail"
+    )
+
+
+class TwitchChannelEditorInfo(TwitchBasic):
+    """
+    Schema of get channel editor info
+    """
+
+    user_id: str = Field(default=..., title="User ID")
+
+    user_name: str = Field(default=..., title="User Name")
+
+    created_at: str = Field(default=..., title="Time created")
 
 
 class TwitchChannelEditorDetail(TwitchBasic):
     """
-    Schema of get channel editor
+    Schema of get channel editor detail
     """
 
-    # user id
-    user_id: str = Field(default=..., title="User ID")
-    # user name
-    user_name: str = Field(default=..., title="User Name")
-    # time created
-    created_at: str = Field(default=..., title="Time created")
+    data: List[TwitchChannelEditorInfo] = Field(
+        default=..., title="Data Channel Editor Detail"
+    )
+
+
+class TwitchFollowedChannelsInfo(TwitchBasic):
+    """
+    Schema of get followed channels info
+    """
+
+    broadcaster_id: str = Field(default=..., title="Broadcaster ID")
+
+    broadcaster_login: str = Field(default=..., title="Broadcaster Login")
+
+    broadcaster_name: str = Field(default=..., title="Broadcaster name")
+
+    followed_at: str = Field(default=..., title="Time followed")
 
 
 class TwitchFollowedChannelsDetail(TwitchBasic):
     """
-    Schema of get followed channels
+    Schema of get followed channels detail
     """
 
-    # broadcaster id
-    broadcaster_id: str = Field(default=..., title="Broadcaster ID")
-    # broadcaster login
-    broadcaster_login: str = Field(default=..., title="Broadcaster Login")
-    # broadcaster name
-    broadcaster_name: str = Field(default=..., title="Broadcaster name")
-    # time followed
+    total: int = Field(default=None, title="Total followed channels")
+
+    data: List[TwitchFollowedChannelsInfo] = Field(
+        default=..., title="Data Followed Channels Detail"
+    )
+
+    pagination: Dict = Field(default=None, title="Pagination")
+
+
+class TwitchChannelFollowersInfo(TwitchBasic):
+    """
+    Schema of get channel followers info
+    """
+
     followed_at: str = Field(default=..., title="Time followed")
-    # total
-    total: int = Field(default=..., title="Total followed channels")
+
+    user_id: str = Field(default=..., title="User id")
+
+    user_login: str = Field(default=..., title="User Login")
+
+    user_name: str = Field(default=..., title="User Name")
 
 
 class TwitchChannelFollowersDetail(TwitchBasic):
     """
-    Schema of get channel followers
+    Schema of get channel followers detail
     """
 
-    # time followed
-    followed_at: str = Field(default=..., title="Time followed")
-    # user id
-    user_id: str = Field(default=..., title="User id")
-    # user login
-    user_login: str = Field(default=..., title="User Login")
-    # user name
-    user_name: str = Field(default=..., title="User Name")
-    # total
     total: int = Field(default=..., title="Total followers")
+
+    data: List[TwitchChannelFollowersInfo] = Field(
+        default=..., title="Data Channel Followers Detail"
+    )
+
+    pagination: Dict = Field(default=None, title="Pagination")
+
+
+class TwitchChannelEmotesInfo(TwitchBasic):
+    """
+    Schema of get channel emotes info
+    """
+
+    id: str = Field(default=..., title="ID")
+
+    name: str = Field(default=..., title="Name")
+
+    images: dict = Field(default=..., title="Images")
+
+    tier: str = Field(default=..., title="Tier")
+
+    emote_type: str = Field(default=..., title="Emote Type")
+
+    emote_set_id: str = Field(default=..., title="Emote Set ID")
+
+    format: list = Field(default=..., title="Format")
+
+    scale: list = Field(default=..., title="Scale")
+
+    theme_mode: list = Field(default=..., title="Theme Mode")
 
 
 class TwitchChannelEmotesDetail(TwitchBasic):
     """
-    Schema of get channel emotes
+    Schema of get channel emotes detail
     """
 
-    # id
-    id: str = Field(default=..., title="ID")
-    # name
-    name: str = Field(default=..., title="Name")
-    # tier
-    tier: str = Field(default=..., title="Tier")
-    # emote type
-    emote_type: str = Field(default=..., title="Emote Type")
-    # emote id
-    emote_set_id: str = Field(default=..., title="Emote ID")
-    # emote format
-    format: list = Field(default=..., title="Emote Format")
-    # scale
-    scale: list = Field(default=..., title="Scale")
-    # theme mode
-    theme_mode: list = Field(default=..., title="Theme Mode")
-    # template
+    data: List[TwitchChannelFollowersInfo] = Field(
+        default=..., title="Data Channels Emotes Detail"
+    )
     template: str = Field(default=..., title="Template")
 
 
-class TwitchGlobalEmotesDetail(TwitchChannelEmotesDetail):
+class TwitchGlobalEmotesInfo(TwitchBasic):
     """
-    Schema fo get global emotes
+    Schema fo get global emotes info
     """
+
+    id: str = Field(default=..., title="ID")
+
+    name: str = Field(default=..., title="Name")
+
+    images: dict = Field(default=..., title="Images")
+
+    format: list = Field(default=..., title="Format")
+
+    scale: list = Field(default=..., title="Scale")
+
+    theme_mode: list = Field(default=..., title="Theme Mode")
+
+
+class TwitchGlobalEmotesDetail(TwitchBasic):
+    """
+    Schema fo get global emotes detail
+    """
+
+    data: List[TwitchGlobalEmotesInfo] = Field(
+        default=..., title="Data Global Emotes Detail"
+    )
+    template: str = Field(default=..., title="Template")
+
+
+class TwitchChatSettingsInfo(TwitchBasic):
+    """
+    Schema of get chat settings info
+    """
+
+    broadcaster_id: str = Field(default=..., title="Broadcaster ID")
+
+    emote_mode: bool = Field(default=..., title="Emote Mode")
+
+    follower_mode: bool = Field(default=..., title="Follower Mode")
+
+    follower_mode_duration: int = Field(
+        default=..., title="Follower Mode Duration"
+    )
+
+    moderator_id: str = Field(default=..., title="Moderator ID")
+
+    non_moderator_chat_delay: bool = Field(
+        default=..., title="Non Moderator Chat Delay"
+    )
+
+    non_moderator_chat_delay_duration: int = Field(
+        default=..., title="Non Moderator Chat Delay Duration"
+    )
+
+    slow_mode: bool = Field(default=..., title="Slow Mode")
+
+    slow_mode_wait_time: int = Field(default=..., title="Slow Mode Wait Time")
+
+    subscriber_mode: bool = Field(default=..., title="Subscriber Mode")
+
+    unique_chat_mode: bool = Field(default=..., title="Unique Chat Mode")
 
 
 class TwitchChatSettingsDetail(TwitchBasic):
     """
-    Schema of get chat settings
+    Schema of get chat settings detail
     """
 
-    # broadcaster id
+    data: List[TwitchChatSettingsInfo] = Field(
+        default=..., title="Data Chat Settings Detail"
+    )
+
+
+class TwitchClipsInfo(TwitchBasic):
+    """
+    Schema of get clips info
+    """
+
+    id: str = Field(default=..., title="ID")
+
+    url: str = Field(default=..., title="Url")
+
+    embed_url: str = Field(default=..., title="Embed Url")
+
     broadcaster_id: str = Field(default=..., title="Broadcaster ID")
-    # emote mode
-    emote_mode: bool = Field(default=..., title="Emote Mode")
-    # follower mode
-    follower_mode: bool = Field(default=..., title="Follower Mode")
-    # follower mode duration
-    follower_mode_duration: int = Field(
-        default=..., title="Follower Mode Duration"
-    )
-    # moderator id
-    moderator_id: str = Field(default=..., title="Moderator ID")
-    # non moderator chat delay
-    non_moderator_chat_delay: bool = Field(
-        default=..., title="Non Moderator Chat Delay"
-    )
-    # non moderator chat delay duration
-    non_moderator_chat_delay_duration: int = Field(
-        default=..., title="Non Moderator Chat Delay Duration"
-    )
-    # slow mode
-    slow_mode: bool = Field(default=..., title="Slow Mode")
-    # slow mode wait time
-    slow_mode_wait_time: int = Field(default=..., title="Slow Mode Wait Time")
-    # subscriber mode
-    subscriber_mode: bool = Field(default=..., title="Subscriber Mode")
-    # unique chat mode
-    unique_chat_mode: bool = Field(default=..., title="Unique Chat Mode")
+
+    broadcaster_name: str = Field(default=..., title="Broadcaster Name")
+
+    creator_id: str = Field(default=..., title="Creator ID")
+
+    creator_name: str = Field(default=..., title="Creator Name")
+
+    video_id: str = Field(default=..., title="Video ID")
+
+    game_id: str = Field(default=..., title="Game ID")
+
+    language: str = Field(default=..., title="Language")
+
+    title: str = Field(default=..., title="Title")
+
+    view_count: int = Field(default=..., title="View Count")
+
+    created_at: str = Field(default=..., title="Time Created")
+
+    thumbnail_url: str = Field(default=..., title="Thumbnail Url")
+
+    duration: float = Field(default=..., title="Duration")
+
+    vod_offset: int = Field(default=..., title="Vod Offset")
+
+    is_featured: bool = Field(default=..., title="Is Featured")
 
 
 class TwitchClipsDetail(TwitchBasic):
     """
-    Schema of get clips
+    Schema of get clips detail
     """
 
-    # id
-    id: str = Field(default=..., title="ID")
-    # url
-    url: str = Field(default=..., title="Url")
-    # embed url
-    embed_url: str = Field(default=..., title="Embed Url")
-    # broadcaster id
-    broadcaster_id: str = Field(default=..., title="Broadcaster ID")
-    # broadcaster name
-    broadcaster_name: str = Field(default=..., title="Broadcaster Name")
-    # creator id
-    creator_id: str = Field(default=..., title="Creator ID")
-    # creator name
-    creator_name: str = Field(default=..., title="Creator Name")
-    # video id
-    video_id: str = Field(default=..., title="Video ID")
-    # game id
-    game_id: str = Field(default=..., title="Game ID")
-    # language
-    language: str = Field(default=..., title="Language")
-    # title
-    title: str = Field(default=..., title="Title")
-    # view count
-    view_count: int = Field(default=..., title="View Count")
-    # time created
-    created_at: str = Field(default=..., title="Time Created")
-    # thumbnail url
-    thumbnail_url: str = Field(default=..., title="Thumbnail Url")
-    # duration
-    duration: float = Field(default=..., title="Duration")
-    # vod offset
-    vod_offset: int = Field(default=..., title="Vod Offset")
-    # is featured
-    is_featured: bool = Field(default=..., title="Is Featured")
+    data: List[TwitchClipsInfo] = Field(
+        default=..., title="Data Global Emotes Detail"
+    )
+
+    pagination: Dict = Field(default=None, title="Pagination")
+
+
+class TwitchGetVIPPersonChannelInfo(TwitchBasic):
+    """
+    Schema of get channel VIP person info
+    """
+
+    user_id: str = Field(default=..., title="User ID")
+
+    user_name: str = Field(default=..., title="User Name")
+
+    user_login: str = Field(default=..., title="User Login")
 
 
 class TwitchGetVIPPersonChannelDetail(TwitchBasic):
     """
-    Schema of get channel VIP person
+    Schema of get channel VIP person detail
     """
 
-    # user id
-    user_id: str = Field(default=..., title="User ID")
-    # user name
-    user_name: str = Field(default=..., title="User Name")
-    # user login
-    user_login: str = Field(default=..., title="User Login")
+    data: List[TwitchGetVIPPersonChannelInfo] = Field(
+        default=..., title="Data VIP Channel Person Detail"
+    )
+
+    pagination: Dict = Field(default=None, title="Pagination")
+
+
+class TwitchPoolsChoices(TwitchBasic):
+    """
+    Schema of get pool choices
+    """
+
+    id: str = Field(default=..., title="ID")
+
+    title: str = Field(default=..., title="Title")
+
+    votes: int = Field(default=..., title="Votes")
+
+    channel_points_votes: int = Field(
+        default=..., title="Channel Points Votes"
+    )
+
+    bits_votes: int = Field(default=..., title="Bits Votes")
+
+
+class TwitchPoolsInfo(TwitchBasic):
+    """
+    Schema of get pools info
+    """
+
+    id: str = Field(default=..., title="ID")
+
+    broadcaster_id: str = Field(default=..., title="Broadcaster ID")
+
+    broadcaster_name: str = Field(default=..., title="Broadcaster Name")
+
+    broadcaster_login: str = Field(default=..., title="Broadcaster Login")
+
+    title: str = Field(default=..., title="Title")
+
+    choices: List[TwitchPoolsChoices] = Field(default=..., title="Choices")
+
+    bits_voting_enabled: bool = Field(default=..., title="Bits Voting Enabled")
+
+    bits_per_vote: int = Field(default=..., title="Bits Per Vote")
+
+    channel_points_voting_enabled: bool = Field(
+        default=..., title="Channel Points Voting Enabled"
+    )
+
+    channel_points_per_vote: int = Field(
+        default=..., title="Channel Points Per Vote"
+    )
+
+    status: str = Field(default=..., title="Status")
+
+    duration: int = Field(default=..., title="Duration")
+
+    started_at: str = Field(default=..., title="Time Started")
 
 
 class TwitchPoolsDetail(TwitchBasic):
     """
-    Schema of get pools
+    Schema of get pools detail
     """
 
-    # id
-    id: str = Field(default=..., title="ID")
-    # broadcaster id
-    broadcaster_id: str = Field(default=..., title="Broadcaster ID")
-    # broadcaster name
-    broadcaster_name: str = Field(default=..., title="Broadcaster Name")
-    # broadcaster login
-    broadcaster_login: str = Field(default=..., title="Broadcaster Login")
-    # title
-    title: str = Field(default=..., title="Title")
-    # choices
-    choices: list = Field(default=..., title="Choices")
-    # bits voting enabled
-    bits_voting_enabled: bool = Field(default=..., title="Bits Voting Enabled")
-    # bits per vote
-    bits_per_vote: int = Field(default=..., title="Bits Per Vote")
-    # channel points voting enabled
-    channel_points_voting_enabled: bool = Field(
-        default=..., title="Channel Points Voting Enabled"
+    data: List[TwitchPoolsInfo] = Field(
+        default=..., title="Data VIP Channel Person Detail"
     )
-    # channel points per vote
-    channel_points_per_vote: int = Field(
-        default=..., title="Channel Points Per Vote"
-    )
-    # status
-    status: str = Field(default=..., title="Status")
-    # duration
-    duration: int = Field(default=..., title="Duration")
-    # time started
-    started_at: str = Field(default=..., title="Time Started")
-    # time ended
-    ended_at: str = Field(default=..., title="Time Ended")
+
+    pagination: Dict = Field(default=None, title="Pagination")

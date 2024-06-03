@@ -30,6 +30,7 @@ def authorize_by_twitch() -> str:
     redirect_uri = (
         requests.Request("GET", url, params=parameters).prepare().url
     )
+    print(redirect_uri)
     return redirect_uri
 
 
@@ -69,15 +70,6 @@ def get_user(token) -> Json:
     return response.json()
 
 
-def get_user_id(user: dict) -> str:
-    """
-    Get user id from user information
-    :param user:
-    :return:
-    """
-    return user["data"][0]["id"]
-
-
 def get_games(token: str, game_id: str, name: str, igdb_id: str) -> Json:
     """
     Func which get game information by id, name and igdb_id
@@ -115,7 +107,7 @@ def get_top_games(token: str) -> Json:
     return response.json()
 
 
-def get_game_analytics(token: str, game_id: str = None) -> Json:
+def get_game_analytics(token: str, game_id: str) -> Json:
     """
     Func which get game analytic
     :param game_id:
@@ -133,7 +125,7 @@ def get_game_analytics(token: str, game_id: str = None) -> Json:
     return response.json()
 
 
-def get_channel_information(token: str, broadcaster_id: int = None) -> Json:
+def get_channel_information(token: str, broadcaster_id: str) -> Json:
     """
     Func which get information about channel
     :param token:
@@ -153,7 +145,7 @@ def get_channel_information(token: str, broadcaster_id: int = None) -> Json:
     return response.json()
 
 
-def get_channel_editor(token: str, broadcaster_id: int = None) -> Json:
+def get_channel_editor(token: str, broadcaster_id: str) -> Json:
     """
     Func which get channel editor
     :param token: 'x8d5893vntkgiufs1of9a8smbsqhov'
@@ -171,7 +163,7 @@ def get_channel_editor(token: str, broadcaster_id: int = None) -> Json:
     return response.json()
 
 
-def get_followed_channels(token: str, user_id: str = None) -> Json:
+def get_followed_channels(token: str, user_id: str) -> Json:
     """
     Func which get followed channels
     :param token:
@@ -189,7 +181,7 @@ def get_followed_channels(token: str, user_id: str = None) -> Json:
     return response.json()
 
 
-def get_channel_followers(token: str, broadcaster_id: str = None) -> Json:
+def get_channel_followers(token: str, broadcaster_id: str) -> Json:
     """
     Func which get channel followers
     :param token:
@@ -207,7 +199,7 @@ def get_channel_followers(token: str, broadcaster_id: str = None) -> Json:
     return response.json()
 
 
-def get_channel_emotes(token: str, broadcaster_id: int = None) -> Json:
+def get_channel_emotes(token: str, broadcaster_id: str) -> Json:
     """
     Func which get channel emotes
     :param broadcaster_id:
@@ -242,7 +234,7 @@ def get_global_emotes(token: str) -> Json:
     return response.json()
 
 
-def get_chat_settings(token: str, broadcaster_id: int = None) -> Json:
+def get_chat_settings(token: str, broadcaster_id: str) -> Json:
     """
     Func which get chat settings
     :param broadcaster_id:
@@ -260,9 +252,7 @@ def get_chat_settings(token: str, broadcaster_id: int = None) -> Json:
     return response.json()
 
 
-def get_clips(
-    token: str, game_id: int = None, id: int = None, broadcaster_id: int = None
-) -> Json:
+def get_clips(token: str, broadcaster_id: str) -> Json:
     """
     Func which get clips
     :param token: 'x8d5893vntkgiufs1of9a8smbsqhov'
@@ -273,7 +263,7 @@ def get_clips(
     """
     # declaring url, params and headers
     url = "https://api.twitch.tv/helix/clips"
-    params = {"broadcaster_id": broadcaster_id, "game_id": game_id, "id": id}
+    params = {"broadcaster_id": broadcaster_id}
     headers = {
         "Client-Id": SETTINGS.TWITCH_CLIENT_ID,
         "Authorization": f"Bearer {token}",
@@ -283,7 +273,7 @@ def get_clips(
     return response.json()
 
 
-def get_vip_person_of_channel(token: str, broadcaster_id: int = None) -> Json:
+def get_vip_person_of_channel(token: str, broadcaster_id: str) -> Json:
     """
     Func which get channel vip persons
     :param broadcaster_id:
@@ -301,7 +291,7 @@ def get_vip_person_of_channel(token: str, broadcaster_id: int = None) -> Json:
     return response.json()
 
 
-def get_pools(token: str, broadcaster_id: int = None) -> Json:
+def get_pools(token: str, broadcaster_id: str) -> Json:
     """
     Func which get pools
     :param broadcaster_id:
