@@ -1,7 +1,6 @@
-from decimal import Decimal
-from typing import Optional, Dict
+from typing import Optional
 
-from pydantic import Field, PositiveInt
+from pydantic import Field
 
 from core.types.base import DTO
 
@@ -11,28 +10,14 @@ class LamodaBasic(DTO):
     Basic schema of Lamoda parser
     """
 
+    ...
 
-class SneakerParserBasic(LamodaBasic):
+
+class SneakerInfo(DTO):
     """
-    Base pydantic schema of sneaker parser
+    Schema of sneaker information for a specific brand
     """
 
-    # brand
-    brand: str = Field(
-        default=...,
-        max_length=128,
-        title="Бренд",
-        description="Название бренда",
-        examples=[
-            "ASICS",
-            "Anta",
-            "Calvin Klein Jeans",
-            "New Balance",
-            "Nike",
-            "PUMA",
-        ],
-    )
-    # model
     model: Optional[str] = Field(
         default="",
         max_length=128,
@@ -47,97 +32,40 @@ class SneakerParserBasic(LamodaBasic):
             "Blktop Rider Preppy",
         ],
     )
-    # price
-    price: Optional[Decimal] = Field(
+    price: Optional[str] = Field(
         default=None,
-        max_digits=5,
-        decimal_places=2,
         title="Цена",
         description="Цена конкретной модели конкретного бренда",
         examples=["120.00, 419,59, 999.99"],
     )
 
 
-class SneakerParserAddForm(SneakerParserBasic):
+class SneakerParserBasic(LamodaBasic):
     """
-    Schema of add new sneaker
-    """
-
-    ...
-
-
-class SneakerParserUpdateForm(SneakerParserBasic):
-    """
-    Schema of update exist sneaker
+    Base pydantic schema of sneaker parser
     """
 
-    ...
-
-
-class SneakerDetail(SneakerParserBasic):
-    """
-    Schema of sneaker detail
-    """
-
-    # id
-    _id: Optional[PositiveInt] = Field(
-        default=None, title="ID", description="ID кокнретной пары кроссовок"
+    brand: str = Field(
+        default=...,
+        title="Brand",
+        description="Some Brand of sneaker",
+        examples=[
+            {
+                "brand": "New Balance",
+            },
+            {
+                "brand": "adidas",
+            },
+        ],
     )
-    # article
-    article: Optional[str] = Field(
-        default=None,
-        title="Артикул",
-        description="Артикул кокнретной пары кроссовок",
-    )
-    # kind of sport
-    kind_of_sport: Optional[str] = Field(
-        default=None,
-        title="Вид спорта",
-        description="Вид спорта, под который подходит данная пара кроссовок",
-    )
-    # internal material
-    internal_material: Optional[str] = Field(
-        default=None,
-        title="Внутренний материал",
-        description="Внутренний материал пары кроссовок",
-    )
-    # outer material
-    outer_material: Optional[str] = Field(
-        default=None,
-        title="Внешний материал",
-        description="Внешний материал пары кроссовок",
-    )
-    # sole material
-    sole_material: Optional[str] = Field(
-        default=None,
-        title="Материал подошвы",
-        description="Материал подошвы пары кроссовок",
-    )
-    # insole material
-    insole_material: Optional[str] = Field(
-        default=None,
-        title="Материал стельки",
-        description="Материал стельки пары кроссовок",
-    )
-    # season
-    season: Optional[str] = Field(
-        default=None,
-        title="Сезон",
-        description="Сезон, под который подходят данные кроссовки",
-    )
-    # country of production
-    country_of_production: Optional[str] = Field(
-        default=None,
-        title="Страна производства",
-        description="Страна, в которой произведена пара кроссовок",
-    )
-    # color
-    color: Optional[str] = Field(
-        default=None, title="Цвет", description="Цвет данной пары кроссовок"
-    )
-    # clasp
-    clasp: Optional[str] = Field(
-        default=None, title="Застёжка", description="Застёжка пары кроссовок"
+    info: SneakerInfo = Field(
+        default=...,
+        title="Info",
+        description="Sneaker Info",
+        examples=[
+            {"info": {"model": "574", "price": "569.00"}},
+            {"info": {"model": "STRUTTER", "price": "319.00"}},
+        ],
     )
 
 
@@ -146,13 +74,42 @@ class SneakerParserHrefBasic(LamodaBasic):
     Basic schema of href and other params by sneaker
     """
 
-    # href
-    href: Dict[str, str] = Field(
+    sneaker: str = Field(
         default=...,
-        title="Пара кроссовок",
-        description="Кокретная пара кроссовок",
+        title="Brand Model",
+        description="Some Brand Model of sneaker",
         examples=[
-            "'361': {'model': 'AG4-CQT', 'price': '449.00'}",
-            "'ASICS': {'model': 'GEL-LYTE III', 'price': " "'639.00 р.'}",
+            {
+                "sneaker": "New Balance 530",
+            },
+            {
+                "sneaker": "adidas DURAMO SL M",
+            },
         ],
+    )
+    href: str = Field(
+        default=...,
+        title="sneaker href",
+        description="some sneaker href",
+        examples=[
+            {"href": "/p/rtladl945501/shoes-newbalance-krossovki/"},
+            {"href": "/p/rtlacx630701/shoes-adidas-krossovki/"},
+        ],
+    )
+
+
+class SneakerDetail(LamodaBasic):
+    """
+    Schema of sneaker detail
+    """
+
+    title: str = Field(
+        default=...,
+        title="Title params",
+        description="Title params of sneaker",
+    )
+    value: str = Field(
+        default=...,
+        title="Value params",
+        description="Value params of sneaker",
     )

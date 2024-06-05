@@ -20,6 +20,8 @@ pydantic-settings = "*"
 lxml = "*"
 types-requests = "*"
 kafka-python = "*"
+pytest-asyncio = "*"
+pytest-mongodb = "*"
 
 [dev-packages]
 

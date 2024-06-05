@@ -10,4 +10,5 @@ class DTO(BaseModel):
         arbitrary_types_allowed=True,
         str_strip_whitespace=True,
         from_attributes=True,
+        extra="ignore",
     )

@@ -1,4 +1,7 @@
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
+
+load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -9,6 +12,8 @@ class Settings(BaseSettings):
     # MongoDB environments
     MONGODB_HOST: str
     MONGODB_PORT: int
+    MONGO_INITDB_ROOT_USERNAME: str
+    MONGO_INITDB_ROOT_PASSWORD: int
 
     # Twitch environments
     TWITCH_CLIENT_ID: str
@@ -22,4 +27,3 @@ class Settings(BaseSettings):
     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: int
     KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: int
     KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: int
-
