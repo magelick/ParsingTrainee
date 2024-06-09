@@ -20,6 +20,7 @@ services:  # all services
       - .:/app
     depends_on:  # what services (containers) this container depends on
       - mongodb
+      - kafka
 
   twitch_web: # twitch app service
     build: # Dockerfile
@@ -40,6 +41,7 @@ services:  # all services
       - .:/app
     depends_on: # what services (containers) this container depends on
       - mongodb
+      - kafka
 
   mongodb: # mongodb service
     image: mongo:latest  # what image use for this service (container)
@@ -65,10 +67,11 @@ services:  # all services
 
   kafka:  # kafka service
     image: confluentinc/cp-kafka:latest
+    hostname: kafka
     container_name: "web-broker"  # service (container) name
     ports:  # service (container) ports
       - "9092:9092"
-    env_file: # .env file with environments
+    env_file:  # .env file with environments
       - ./.env
-    depends_on:  # what services (containers) this container depends on
+    depends_on:
       - zookeeper

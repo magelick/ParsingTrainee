@@ -19,9 +19,7 @@ from core.utils.lamoda import (
     get_sneaker_by_article,
 )
 
-from core.dependencies import (
-    check_data_on_exist,
-)
+from core.dependencies import check_data_on_exist, add_into_topic
 
 # lamoda router
 router = APIRouter(
@@ -52,10 +50,8 @@ async def get_sneakers(page: PositiveInt) -> List[SneakerParserBasic]:
     ]
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=lamoda_list_sneakers, data=dict(sneakers), session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="lamoda-list-sneakers-topic", data=sneakers)
     # return valid data
     return data
 
@@ -83,12 +79,10 @@ async def get_hrefs(
     ]
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=lamoda_list_sneaker_hrefs,
-    #     data=dict(sneaker_hrefs),
-    #     session=session,
-    # )
+    # add valid data into topic
+    add_into_topic(
+        topic_name="lamoda-list-sneaker-hrefs-topic", data=sneaker_hrefs
+    )
     # return valid data
     return data
 
@@ -114,10 +108,8 @@ async def get_sneaker_detail_by_href(href: str) -> List[SneakerDetail]:
     ]
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=lamoda_sneaker_detail, data=dict(sneaker), session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="lamoda-sneaker-topic", data=sneaker)
     # return valid data
     return data
 
@@ -143,9 +135,7 @@ async def get_sneaker_detail_by_article(article: str) -> List[SneakerDetail]:
     ]
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=lamoda_sneaker_detail, data=dict(sneaker), session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="lamoda-sneaker-topic", data=sneaker)
     # return valid data
     return data

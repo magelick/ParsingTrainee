@@ -31,7 +31,9 @@ from core.utils.twitch import (
 
 @pytest.mark.asyncio
 async def test_lamoda_all_sneakers():
-    sneakers = get_all_sneakers(page_int=randint(1, 10))
+    page = randint(1, 10)
+
+    sneakers = get_all_sneakers(page_int=page)
 
     for brand, info in sneakers.items():
         assert isinstance(brand, str)
@@ -48,7 +50,9 @@ async def test_lamoda_all_sneakers():
 
 @pytest.mark.asyncio
 async def test_lamoda_sneakers_hrefs():
-    hrefs = get_sneakers_hrefs(page_int=randint(1, 10))
+    page = randint(1, 10)
+
+    hrefs = get_sneakers_hrefs(page_int=page)
 
     for sneaker, href in hrefs.items():
 
@@ -61,9 +65,9 @@ async def test_lamoda_sneakers_hrefs():
 
 @pytest.mark.asyncio
 async def test_lamoda_sneaker_by_href():
-    sneaker_info = get_sneaker_by_href(
-        href="/p/rtladl534401/shoes-napapijri-krossovki/"
-    )
+    href = "/p/rtladl534401/shoes-napapijri-krossovki/"
+
+    sneaker_info = get_sneaker_by_href(href=href)
 
     for title, value in sneaker_info.items():
 
@@ -73,7 +77,9 @@ async def test_lamoda_sneaker_by_href():
 
 @pytest.mark.asyncio
 async def test_lamoda_sneaker_by_article():
-    sneaker_info = get_sneaker_by_article(article="rtladl534401")
+    article = "rtladl534401"
+
+    sneaker_info = get_sneaker_by_article(article=article)
 
     for title, value in sneaker_info.items():
 
@@ -88,11 +94,11 @@ async def test_authorize():
 
 
 @pytest.mark.asyncio
-@pytest.mark.skip
+@pytest.mark.xfail
 async def test_get_twitch_tokens():
-    tokens = get_twitch_tokens(
-        authorization_code="2zs9l6j8h626elx4z26h0dq6vp9iqc"
-    )
+    authorization_code = "2zs9l6j8h626elx4z26h0dq6vp9iqc"
+
+    tokens = get_twitch_tokens(authorization_code=authorization_code)
 
     assert "access_token" in tokens
     assert "expires_in" in tokens
@@ -152,11 +158,15 @@ async def test_get_user(get_access_token):
 
 @pytest.mark.asyncio
 async def test_get_games(get_access_token):
+    game_id = "33214"
+    igdb_id = "1905"
+    name = "Fortnite"
+
     games = get_games(
-        game_id="33214",
+        game_id=game_id,
         token=get_access_token,
-        igdb_id="1905",
-        name="Fortnite",
+        igdb_id=igdb_id,
+        name=name,
     )
 
     for data, value in games.items():
@@ -201,9 +211,11 @@ async def test_get_top_games(get_access_token):
 
 
 @pytest.mark.asyncio
-@pytest.mark.skip
+@pytest.mark.xfail
 async def test_get_game_analytic(get_access_token):
-    analytic = get_game_analytics(token=get_access_token, game_id="")
+    game_id = ""
+
+    analytic = get_game_analytics(token=get_access_token, game_id=game_id)
 
     for data, value in analytic.items():
         assert isinstance(data, str)
@@ -231,9 +243,9 @@ async def test_get_game_analytic(get_access_token):
 
 
 @pytest.mark.asycnio
-async def test_get_channel_information(get_access_token):
+async def test_get_channel_information(get_access_token, get_user_id):
     info = get_channel_information(
-        token=get_access_token, broadcaster_id="1088507447"
+        token=get_access_token, broadcaster_id=get_user_id
     )
 
     for data, value in info.items():
@@ -267,9 +279,9 @@ async def test_get_channel_information(get_access_token):
 
 
 @pytest.mark.asyncio
-async def test_get_channel_editor(get_access_token):
+async def test_get_channel_editor(get_access_token, get_user_id):
     editor = get_channel_editor(
-        token=get_access_token, broadcaster_id="1088507447"
+        token=get_access_token, broadcaster_id=get_user_id
     )
 
     for data, value in editor.items():
@@ -278,9 +290,9 @@ async def test_get_channel_editor(get_access_token):
 
 
 @pytest.mark.asyncio
-async def test_get_followed_channel(get_access_token):
+async def test_get_followed_channel(get_access_token, get_user_id):
     followed_channel = get_followed_channels(
-        token=get_access_token, user_id="1088507447"
+        token=get_access_token, user_id=get_user_id
     )
 
     for data, value in followed_channel.items():
@@ -289,9 +301,9 @@ async def test_get_followed_channel(get_access_token):
 
 
 @pytest.mark.asyncio
-async def test_get_channel_followers(get_access_token):
+async def test_get_channel_followers(get_access_token, get_user_id):
     followers = get_channel_followers(
-        token=get_access_token, broadcaster_id="1088507447"
+        token=get_access_token, broadcaster_id=get_user_id
     )
 
     for data, value in followers.items():
@@ -300,9 +312,9 @@ async def test_get_channel_followers(get_access_token):
 
 
 @pytest.mark.asyncio
-async def test_get_channel_emotes(get_access_token):
+async def test_get_channel_emotes(get_access_token, get_user_id):
     emotes = get_channel_emotes(
-        token=get_access_token, broadcaster_id="1088507447"
+        token=get_access_token, broadcaster_id=get_user_id
     )
 
     for data, value in emotes.items():
@@ -311,9 +323,9 @@ async def test_get_channel_emotes(get_access_token):
 
 
 @pytest.mark.asyncio
-async def test_get_channel_chat_settings(get_access_token):
+async def test_get_channel_chat_settings(get_access_token, get_user_id):
     settings = get_chat_settings(
-        token=get_access_token, broadcaster_id="1088507447"
+        token=get_access_token, broadcaster_id=get_user_id
     )
 
     assert "data" in settings
@@ -321,9 +333,9 @@ async def test_get_channel_chat_settings(get_access_token):
 
 
 @pytest.mark.asyncio
-async def test_get_channel_vip_person(get_access_token):
+async def test_get_channel_vip_person(get_access_token, get_user_id):
     persons = get_vip_person_of_channel(
-        token=get_access_token, broadcaster_id="1088507447"
+        token=get_access_token, broadcaster_id=get_user_id
     )
 
     for data, value in persons.items():
@@ -357,8 +369,8 @@ async def test_get_global_emotes(get_access_token):
 
 
 @pytest.mark.asyncio
-async def test_get_clips(get_access_token):
-    clips = get_clips(token=get_access_token, broadcaster_id="1088507447")
+async def test_get_clips(get_access_token, get_user_id):
+    clips = get_clips(token=get_access_token, broadcaster_id=get_user_id)
 
     for data, value in clips.items():
         assert isinstance(data, str)
@@ -366,8 +378,8 @@ async def test_get_clips(get_access_token):
 
 
 @pytest.mark.asyncio
-async def test_get_pools(get_access_token):
-    pools = get_pools(token=get_access_token, broadcaster_id="1088507447")
+async def test_get_pools(get_access_token, get_user_id):
+    pools = get_pools(token=get_access_token, broadcaster_id=get_user_id)
 
     for data, value in pools.items():
         assert isinstance(data, str)

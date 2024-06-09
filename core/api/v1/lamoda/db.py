@@ -2,6 +2,7 @@ from typing import Dict, List
 
 from fastapi import APIRouter
 from fastapi.responses import ORJSONResponse
+from pymongo.client_session import ClientSession
 from starlette import status
 
 from core.database.base import (
@@ -12,6 +13,9 @@ from core.database.base import (
 from core.dependencies import (
     get_all_doc_form_collection,
     get_doc_from_collection_by_id,
+    get_db_session,
+    get_data_from_topic,
+    check_data_on_exits_into_db,
 )
 
 # lamoda db router
@@ -27,12 +31,17 @@ router = APIRouter(
     status_code=status.HTTP_200_OK,
     summary="Get list sneakers on page from db",
 )
-async def get_list_sneakers_from_db() -> List:
+async def get_list_sneakers_from_db(
+    session: ClientSession = get_db_session,
+) -> List:
     """
     Endpoint which get list sneakers from db
     :return:
     """
-    # get list sneakers from db
+    topic_data = get_data_from_topic(topic_name="lamoda-list-sneakers-topic")
+    check_data_on_exits_into_db(
+        data=topic_data, collection=lamoda_list_sneakers, session=session
+    )
     return get_all_doc_form_collection(collection=lamoda_list_sneakers)
 
 
@@ -41,11 +50,19 @@ async def get_list_sneakers_from_db() -> List:
     status_code=status.HTTP_200_OK,
     summary="Get list sneaker hrefs on page from db",
 )
-async def get_list_sneaker_hrefs_from_db() -> List:
+async def get_list_sneaker_hrefs_from_db(
+    session: ClientSession = get_db_session,
+) -> List:
     """
     Endpoint which get list sneaker hrefs from db
     :return:
     """
+    topic_data = get_data_from_topic(
+        topic_name="lamoda-list-sneaker-hrefs-topic"
+    )
+    check_data_on_exits_into_db(
+        data=topic_data, collection=lamoda_list_sneaker_hrefs, session=session
+    )
     return get_all_doc_form_collection(collection=lamoda_list_sneaker_hrefs)
 
 
@@ -54,11 +71,17 @@ async def get_list_sneaker_hrefs_from_db() -> List:
     status_code=status.HTTP_200_OK,
     summary="Get list sneaker details by href from db",
 )
-async def get_list_sneaker_detail_by_page_from_db() -> List:
+async def get_list_sneaker_detail_from_db(
+    session: ClientSession = get_db_session,
+) -> List:
     """
     Endpoint which get list sneaker details from db
     :return:
     """
+    topic_data = get_data_from_topic(topic_name="lamoda-sneaker-topic")
+    check_data_on_exits_into_db(
+        data=topic_data, collection=lamoda_sneaker_detail, session=session
+    )
     return get_all_doc_form_collection(collection=lamoda_sneaker_detail)
 
 
