@@ -19,9 +19,10 @@ pre-commit = "*"
 pydantic-settings = "*"
 lxml = "*"
 types-requests = "*"
-kafka-python = "*"
 pytest-asyncio = "*"
 pytest-mongodb = "*"
+six = "*"
+pykafka = "*"
 
 [dev-packages]
 

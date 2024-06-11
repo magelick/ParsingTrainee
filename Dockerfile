@@ -10,6 +10,7 @@ ENV PYTHONUNBUFFERED 1
 
 # install pipenv and project dependencies
 RUN pip install -U pipenv
+RUN apk add --no-cache gcc musl-dev zlib-dev
 COPY Pipfile Pipfile.lock /app/
 RUN pipenv install --dev --system --deploy --ignore-pipfile
 

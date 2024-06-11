@@ -2,8 +2,6 @@ from fastapi import APIRouter
 from fastapi.responses import ORJSONResponse
 from starlette import status
 
-from pymongo.client_session import ClientSession
-
 from core.utils.twitch import (
     authorize_by_twitch,
     get_twitch_tokens,
@@ -36,15 +34,12 @@ from core.types.twitch import (
     TwitchGlobalEmotesDetail,
     TwitchChatSettingsDetail,
     TwitchClipsDetail,
-    TwitchGetVIPPersonChannelDetail,
     TwitchPoolsDetail,
     TwitchTokensDetail,
+    TwitchVIPPersonChannelDetail,
 )
 
-from core.dependencies import (
-    check_data_on_exist,
-    get_db_session,
-)
+from core.dependencies import check_data_on_exist, add_into_topic
 
 
 # twitch router
@@ -72,12 +67,9 @@ async def authorize():
     response_model=TwitchTokensDetail,
     tags=["Twitch Auth"],
 )
-async def get_tokens(
-    authorization_code: str, session: ClientSession = get_db_session
-) -> TwitchTokensDetail:
+async def get_tokens(authorization_code: str) -> TwitchTokensDetail:
     """
     Endpoint which get
-    :param session:
     :param authorization_code:
     :return:
     """
@@ -87,8 +79,8 @@ async def get_tokens(
     data = TwitchTokensDetail.model_validate(auth_data, from_attributes=True)
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(collection=twitch_auth, data=auth_data, session=session)
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-auth-topic", data=auth_data)
     # return valid data
     return data
 
@@ -100,12 +92,9 @@ async def get_tokens(
     response_model=TwitchUserDetail,
     tags=["Twitch Auth"],
 )
-async def get_user_info(
-    access_token: str, session: ClientSession = get_db_session
-) -> TwitchUserDetail:
+async def get_user_info(access_token: str) -> TwitchUserDetail:
     """
     Endpoint which get user info with id by access token
-    :param session:
     :param access_token:
     :return:
     """
@@ -115,8 +104,8 @@ async def get_user_info(
     data = TwitchUserDetail.model_validate(user, from_attributes=True)
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(collection=twitch_user, data=user, session=session)
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-user-topic", data=user)
     # return valid data
     return data
 
@@ -133,11 +122,9 @@ async def get_twitch_games(
     token: str,
     name: str,
     igdb_id: str,
-    session: ClientSession = get_db_session,
 ) -> TwitchGameDetail:
     """
     Endpoint which get game by id
-    :param session:
     :param game_id:
     :param token:
     :param name:
@@ -150,8 +137,8 @@ async def get_twitch_games(
     data = TwitchGameDetail.model_validate(game, from_attributes=True)
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(collection=twitch_games, data=game, session=session)
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-games-topic", data=game)
     # return valid data
     return data
 
@@ -163,9 +150,7 @@ async def get_twitch_games(
     response_model=TwitchTopGameDetail,
     tags=["Twitch Actions"],
 )
-async def get_top_games_on_twitch(
-    token: str, session: ClientSession = get_db_session
-) -> TwitchTopGameDetail:
+async def get_top_games_on_twitch(token: str) -> TwitchTopGameDetail:
     """
     Endpoint which get top games on twitch
     :return:
@@ -176,10 +161,8 @@ async def get_top_games_on_twitch(
     data = TwitchTopGameDetail.model_validate(top_games, from_attributes=True)
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_top_games, data=top_games, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-top-games-topic", data=top_games)
     # return valid data
     return data
 
@@ -192,11 +175,10 @@ async def get_top_games_on_twitch(
     tags=["Twitch Actions"],
 )
 async def get_game_analytic(
-    game_id: str, token: str, session: ClientSession = get_db_session
+    game_id: str, token: str
 ) -> TwitchGameAnalyticDetail:
     """
     Endpoint which get game analytic
-    :param session:
     :param token:
     :param game_id:
     :return:
@@ -209,10 +191,8 @@ async def get_game_analytic(
     )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_games_analytic, data=analytic, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-games-analytic-topic", data=analytic)
     # return valid data
     return data
 
@@ -225,11 +205,10 @@ async def get_game_analytic(
     tags=["Twitch Actions"],
 )
 async def get_channel_information_on_twitch(
-    token: str, broadcaster_id: str, session: ClientSession = get_db_session
+    token: str, broadcaster_id: str
 ) -> TwitchChannelInformationDetail:
     """
     Endpoint which get channel information
-    :param session:
     :param token:
     :param broadcaster_id:
     :return:
@@ -242,10 +221,8 @@ async def get_channel_information_on_twitch(
     )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_channel_information, data=info, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-channel-information-topic", data=info)
     # return valid data
     return data
 
@@ -258,25 +235,24 @@ async def get_channel_information_on_twitch(
     tags=["Twitch Actions"],
 )
 async def get_channel_editor_on_twitch(
-    token: str, broadcaster_id: str, session: ClientSession = get_db_session
+    token: str, broadcaster_id: str
 ) -> TwitchChannelEditorDetail:
     """
     Endpoint which get channel information
-    :param session:
     :param token:
     :param broadcaster_id:
     :return:
     """
     # get channel information
-    info = get_channel_editor(token=token, broadcaster_id=broadcaster_id)
+    editor = get_channel_editor(token=token, broadcaster_id=broadcaster_id)
     # validate this data
-    data = TwitchChannelEditorDetail.model_validate(info, from_attributes=True)
+    data = TwitchChannelEditorDetail.model_validate(
+        editor, from_attributes=True
+    )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_channel_editor, data=info, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-channel-editor-topic", data=editor)
     # return valid data
     return data
 
@@ -289,11 +265,10 @@ async def get_channel_editor_on_twitch(
     tags=["Twitch Actions"],
 )
 async def get_user_followed_channels(
-    user_id: str, token: str, session: ClientSession = get_db_session
+    user_id: str, token: str
 ) -> TwitchFollowedChannelsDetail:
     """
     Endpoint which get user followed channels
-    :param session:
     :param token:
     :param user_id:
     :return:
@@ -306,10 +281,8 @@ async def get_user_followed_channels(
     )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_channel_followed, data=channels, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-channel-followed-topic", data=channels)
     # return valid data
     return data
 
@@ -322,11 +295,11 @@ async def get_user_followed_channels(
     tags=["Twitch Actions"],
 )
 async def get_channel_followers_on_twitch(
-    broadcaster_id: str, token: str, session: ClientSession = get_db_session
+    broadcaster_id: str, token: str
 ) -> TwitchChannelFollowersDetail:
     """
     Endpoint which get channel followers
-    :param session:
+
     :param token:
     :param broadcaster_id:
     :return:
@@ -341,10 +314,8 @@ async def get_channel_followers_on_twitch(
     )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_channel_followers, data=followers, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-channel-followers-topic", data=followers)
     # return valid data
     return data
 
@@ -357,11 +328,10 @@ async def get_channel_followers_on_twitch(
     tags=["Twitch Actions"],
 )
 async def get_channel_emotes_on_twitch(
-    broadcaster_id: str, token: str, session: ClientSession = get_db_session
+    broadcaster_id: str, token: str
 ) -> TwitchChannelEmotesDetail:
     """
     Endpoint which get channel emotes
-    :param session:
     :param broadcaster_id:
     :param token:
     :return:
@@ -374,10 +344,8 @@ async def get_channel_emotes_on_twitch(
     )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_channel_emotes, data=emotes, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-channel-emotes-topic", data=emotes)
     # return valid data
     return data
 
@@ -390,11 +358,10 @@ async def get_channel_emotes_on_twitch(
     tags=["Twitch Actions"],
 )
 async def get_chat_settings_on_twitch(
-    broadcaster_id: str, token: str, session: ClientSession = get_db_session
+    broadcaster_id: str, token: str
 ) -> TwitchChatSettingsDetail:
     """
     Endpoint which get chat settings
-    :param session:
     :param token:
     :param broadcaster_id:
     :return:
@@ -407,10 +374,10 @@ async def get_chat_settings_on_twitch(
     )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_channel_chat_settings, data=settings, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(
+        topic_name="twitch-channel-chat-settings-topic", data=settings
+    )
     # return valid data
     return data
 
@@ -419,15 +386,14 @@ async def get_chat_settings_on_twitch(
     path="/channel/vip/{broadcaster_id}",
     status_code=status.HTTP_200_OK,
     summary="Get VIP's Channel Person",
-    response_model=TwitchGetVIPPersonChannelDetail,
+    response_model=TwitchVIPPersonChannelDetail,
     tags=["Twitch Actions"],
 )
 async def get_vip_persons_on_twitch(
-    broadcaster_id: str, token: str, session: ClientSession = get_db_session
-) -> TwitchGetVIPPersonChannelDetail:
+    broadcaster_id: str, token: str
+) -> TwitchVIPPersonChannelDetail:
     """
     Endpoint which get VIP's Channel Person
-    :param session:
     :param broadcaster_id:
     :param token:
     :return:
@@ -437,15 +403,13 @@ async def get_vip_persons_on_twitch(
         token=token, broadcaster_id=broadcaster_id
     )
     # validate this data
-    data = TwitchGetVIPPersonChannelDetail.model_validate(
+    data = TwitchVIPPersonChannelDetail.model_validate(
         vip_persons, from_attributes=True
     )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_channel_vip, data=vip_persons, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-channel-vip-topic", data=vip_persons)
     # return valid data
     return data
 
@@ -457,9 +421,7 @@ async def get_vip_persons_on_twitch(
     response_model=TwitchGlobalEmotesDetail,
     tags=["Twitch Actions"],
 )
-async def get_global_emotes_on_twitch(
-    token: str, session: ClientSession = get_db_session
-) -> TwitchGlobalEmotesDetail:
+async def get_global_emotes_on_twitch(token: str) -> TwitchGlobalEmotesDetail:
     """
     Endpoint which get global emotes
     :return:
@@ -472,10 +434,8 @@ async def get_global_emotes_on_twitch(
     )
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(
-    #     collection=twitch_global_emotes, data=emotes, session=session
-    # )
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-global-emotes-topic", data=emotes)
     # return valid data
     return data
 
@@ -488,11 +448,10 @@ async def get_global_emotes_on_twitch(
     tags=["Twitch Actions"],
 )
 async def get_clips_on_twitch(
-    broadcaster_id: str, token: str, session: ClientSession = get_db_session
+    broadcaster_id: str, token: str
 ) -> TwitchClipsDetail:
     """
     Endpoint which get clips
-    :param session:
     :param broadcaster_id:
     :param token:
     :return:
@@ -503,8 +462,8 @@ async def get_clips_on_twitch(
     data = TwitchClipsDetail.model_validate(clips, from_attributes=True)
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(collection=twitch_clips, data=clips, session=session)
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-clips-topic", data=clips)
     # return valid data
     return data
 
@@ -517,11 +476,10 @@ async def get_clips_on_twitch(
     tags=["Twitch Actions"],
 )
 async def get_pools_on_twitch(
-    broadcaster_id: str, token: str, session: ClientSession = get_db_session
+    broadcaster_id: str, token: str
 ) -> TwitchPoolsDetail:
     """
     Endpoint which get pools
-    :param session:
     :param broadcaster_id:
     :param token:
     :return:
@@ -532,7 +490,7 @@ async def get_pools_on_twitch(
     data = TwitchPoolsDetail.model_validate(pools, from_attributes=True)
     # check validate data on exist
     check_data_on_exist(validate_data=data)  # type: ignore
-    # add valid data into db collection
-    # add_doc_into_collection(collection=twitch_pools, data=pools, session=session)
+    # add valid data into topic
+    add_into_topic(topic_name="twitch-pools-topic", data=pools)
     # return valid data
     return data

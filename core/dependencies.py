@@ -1,14 +1,17 @@
+import json
 import uuid
 from typing import Dict, List
 
 import requests
 from bs4 import BeautifulSoup
 from fastapi import Depends
+from pykafka.common import OffsetType
 from pymongo.client_session import ClientSession
 from requests import Response
 from pymongo.collection import Collection
 
 from core.database.base import client
+from core.settings import client as kafka_client
 
 
 def get_bs4_object(url: Response) -> BeautifulSoup:
@@ -39,8 +42,8 @@ def add_doc_into_collection(
     :param session:
     :return:
     """
-    data["_id"] = str(uuid)
-    return collection.insert_one(document=data, session=session)
+    data["_id"] = str(uuid.uuid4())
+    collection.insert_one(document=data, session=session)
 
 
 def get_all_doc_form_collection(collection: Collection) -> List[Dict]:
@@ -83,6 +86,55 @@ def check_data_on_exist(validate_data: dict):
     """
     if not validate_data:
         raise ValueError("Invalid Data")
+
+
+def add_into_topic(topic_name: str, data: dict):
+    """
+    Func which add data into topic
+    :param topic_name:
+    :param data:
+    :return:
+    """
+    topic = kafka_client.topics[topic_name]
+    with topic.get_producer() as producer:
+        producer.produce(json.dumps(data).encode("utf-8"))
+
+
+def get_data_from_topic(topic_name) -> Dict:
+    """
+    Func which get data from topic
+    :param topic_name:
+    :return:
+    """
+    topic = kafka_client.topics[topic_name]
+    consumer = topic.get_simple_consumer(
+        consumer_group=b"my_group",
+        consumer_timeout_ms=10,
+        auto_offset_reset=OffsetType.LATEST,
+    )
+    data = {}
+    message = consumer.consume()
+    if message is not None:
+        data[str("kafka_data")] = message.value.decode("utf-8")
+        consumer.commit_offsets()
+    return data
+
+
+def check_data_on_exits_into_db(
+    data: dict, collection: Collection, session: ClientSession
+):
+    """
+    Func which check data on exits into db
+    :param data:
+    :param collection:
+    :param session:
+    :return:
+    """
+    existing_data = get_all_doc_form_collection(collection=collection)
+    for doc in existing_data:
+        if doc.get("kafka_data") == data.get("kafka_data"):
+            return
+    add_doc_into_collection(collection=collection, data=data, session=session)
 
 
 def _get_db_session():

@@ -394,7 +394,7 @@ class TwitchClipsDetail(TwitchBasic):
     pagination: Dict = Field(default=None, title="Pagination")
 
 
-class TwitchGetVIPPersonChannelInfo(TwitchBasic):
+class TwitchVIPPersonChannelInfo(TwitchBasic):
     """
     Schema of get channel VIP person info
     """
@@ -406,12 +406,12 @@ class TwitchGetVIPPersonChannelInfo(TwitchBasic):
     user_login: str = Field(default=..., title="User Login")
 
 
-class TwitchGetVIPPersonChannelDetail(TwitchBasic):
+class TwitchVIPPersonChannelDetail(TwitchBasic):
     """
     Schema of get channel VIP person detail
     """
 
-    data: List[TwitchGetVIPPersonChannelInfo] = Field(
+    data: List[TwitchVIPPersonChannelInfo] = Field(
         default=..., title="Data VIP Channel Person Detail"
     )
 
