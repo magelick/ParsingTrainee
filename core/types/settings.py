@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from pydantic import RedisDsn
 from pydantic_settings import BaseSettings
 
 load_dotenv()
@@ -18,6 +19,9 @@ class Settings(BaseSettings):
     # Twitch environments
     TWITCH_CLIENT_ID: str
     TWITCH_CLIENT_SECRET: str
+
+    # Redis environments
+    REDIS_URL: RedisDsn
 
     # Kafka environments
     KAFKA_BROKER_ID: int

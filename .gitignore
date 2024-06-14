@@ -4,6 +4,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 _DS_Store_
+count_collection.txt
 
 # C extensions
 *.so

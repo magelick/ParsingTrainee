@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import APIRouter
 from fastapi.responses import ORJSONResponse
+from fastapi_cache.decorator import cache
 from pydantic import PositiveInt
 from starlette import status
 
@@ -35,6 +36,7 @@ router = APIRouter(
     response_model=List[SneakerParserBasic],
     summary="Get all sneakers on some page",
 )
+@cache()
 async def get_sneakers(page: PositiveInt) -> List[SneakerParserBasic]:
     """
     Endpoint which get all sneakers from page
@@ -62,6 +64,7 @@ async def get_sneakers(page: PositiveInt) -> List[SneakerParserBasic]:
     response_model=List[SneakerParserHrefBasic],
     summary="Get all sneaker hrefs on some page",
 )
+@cache()
 async def get_hrefs(
     href_page: PositiveInt,
 ) -> List[SneakerParserHrefBasic]:
@@ -93,6 +96,7 @@ async def get_hrefs(
     response_model=List[SneakerDetail],
     summary="Get sneaker by href yourself",
 )
+@cache()
 async def get_sneaker_detail_by_href(href: str) -> List[SneakerDetail]:
     """
     Endpoint which get sneaker info by href
@@ -120,6 +124,7 @@ async def get_sneaker_detail_by_href(href: str) -> List[SneakerDetail]:
     response_model=List[SneakerDetail],
     summary="Get sneaker by href yourself",
 )
+@cache()
 async def get_sneaker_detail_by_article(article: str) -> List[SneakerDetail]:
     """
     Endpoint which get sneaker info by sneaker artile
