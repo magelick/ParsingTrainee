@@ -42,6 +42,7 @@ router = APIRouter(
 @router.get(
     path="/auth",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get List Auth Credentials From DB",
 )
 async def get_auth_credentials_db(
@@ -74,6 +75,7 @@ async def get_auth_credentials_db(
 @router.get(
     path="/user",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get List Users From DB",
 )
 async def get_user_from_db(
@@ -106,6 +108,7 @@ async def get_user_from_db(
 @router.get(
     path="/games",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Games From DB",
 )
 async def get_games_from_db(
@@ -138,6 +141,7 @@ async def get_games_from_db(
 @router.get(
     path="/games/top",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Top Games From DB",
 )
 async def get_top_games_from_db(
@@ -170,6 +174,7 @@ async def get_top_games_from_db(
 @router.get(
     path="/games/analytic",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Game Analytics From DB",
 )
 async def get_games_analytic_from_db(
@@ -206,6 +211,7 @@ async def get_games_analytic_from_db(
 @router.get(
     path="/channel",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Channel Information From DB",
 )
 async def get_channel_information_db(
@@ -246,6 +252,7 @@ async def get_channel_information_db(
 @router.get(
     path="/channel/editor",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Channel Editor From DB",
 )
 async def get_channel_editor_db(
@@ -282,6 +289,7 @@ async def get_channel_editor_db(
 @router.get(
     path="/channel/followed",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Followed Channels From DB",
 )
 async def get_followed_channels_db(
@@ -320,6 +328,7 @@ async def get_followed_channels_db(
 @router.get(
     path="/channel/followers",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Channel Followers From DB",
 )
 async def get_channel_followers_db(
@@ -358,6 +367,7 @@ async def get_channel_followers_db(
 @router.get(
     path="/channel/emotes",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Channel Emotes From DB",
 )
 async def get_channel_emotes_db(
@@ -394,6 +404,7 @@ async def get_channel_emotes_db(
 @router.get(
     path="/channel/chat/settings",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Channel Chat Settings From DB",
 )
 async def get_channel_chat_settings_db(
@@ -434,6 +445,7 @@ async def get_channel_chat_settings_db(
 @router.get(
     path="/channel/vip",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get VIP's Channel Persons From DB",
 )
 async def get_vip_channel_person_db(
@@ -466,6 +478,7 @@ async def get_vip_channel_person_db(
 @router.get(
     path="/emotes/global",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Global Emotes From DB",
 )
 async def get_global_emotes_db(
@@ -500,6 +513,7 @@ async def get_global_emotes_db(
 @router.get(
     path="/clips",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Clips From DB",
 )
 async def get_clips_db(
@@ -532,6 +546,7 @@ async def get_clips_db(
 @router.get(
     path="/pools",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get Pools From DB",
 )
 async def get_pools_db(

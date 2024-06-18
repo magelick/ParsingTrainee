@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import ORJSONResponse
@@ -73,7 +73,7 @@ async def get_sneakers(
     summary="Get all sneaker hrefs on some page",
 )
 @cache()
-async def get_hrefs(
+async def get_hrefs_on_page(
     href_page: PositiveInt,
 ) -> Union[List[SneakerParserHrefBasic], ORJSONResponse]:
     """

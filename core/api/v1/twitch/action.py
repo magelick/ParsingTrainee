@@ -51,10 +51,11 @@ router = APIRouter(prefix="/twitch", default_response_class=ORJSONResponse)
 @router.get(
     path="/auth/",
     status_code=status.HTTP_200_OK,
+    response_model=str,
     summary="Authorize on Twitch",
     tags=["Twitch Auth"],
 )
-async def authorize():
+async def authorize() -> Union[str, ORJSONResponse]:
     """
     Endpoint which redirect on page with important code in path params
     :return:

@@ -31,6 +31,7 @@ router = APIRouter(
 @router.get(
     path="/",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get list sneakers on page from db",
 )
 async def get_list_sneakers_from_db(
@@ -65,6 +66,7 @@ async def get_list_sneakers_from_db(
 @router.get(
     path="/hrefs",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get list sneaker hrefs on page from db",
 )
 async def get_list_sneaker_hrefs_from_db(
@@ -105,6 +107,7 @@ async def get_list_sneaker_hrefs_from_db(
 @router.get(
     path="/details",
     status_code=status.HTTP_200_OK,
+    response_model=List,
     summary="Get list sneaker details by href from db",
 )
 async def get_list_sneaker_detail_from_db(
@@ -137,8 +140,9 @@ async def get_list_sneaker_detail_from_db(
 
 
 @router.get(
-    path="/{id}",
+    path="/details/{id}",
     status_code=status.HTTP_200_OK,
+    response_model=Dict,
     summary="Get sneaker detail by id from db",
 )
 async def get_sneaker_detail_by_page_from_db(
