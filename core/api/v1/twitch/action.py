@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import ORJSONResponse
+from fastapi_cache.decorator import cache
 from starlette import status
 
 from core.utils.twitch import (
@@ -117,6 +118,7 @@ async def get_user_info(access_token: str) -> TwitchUserDetail:
     response_model=TwitchGameDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_twitch_games(
     game_id: str,
     token: str,
@@ -150,6 +152,7 @@ async def get_twitch_games(
     response_model=TwitchTopGameDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_top_games_on_twitch(token: str) -> TwitchTopGameDetail:
     """
     Endpoint which get top games on twitch
@@ -174,6 +177,7 @@ async def get_top_games_on_twitch(token: str) -> TwitchTopGameDetail:
     response_model=TwitchGameAnalyticDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_game_analytic(
     game_id: str, token: str
 ) -> TwitchGameAnalyticDetail:
@@ -204,6 +208,7 @@ async def get_game_analytic(
     response_model=TwitchChannelInformationDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_channel_information_on_twitch(
     token: str, broadcaster_id: str
 ) -> TwitchChannelInformationDetail:
@@ -234,6 +239,7 @@ async def get_channel_information_on_twitch(
     response_model=TwitchChannelEditorDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_channel_editor_on_twitch(
     token: str, broadcaster_id: str
 ) -> TwitchChannelEditorDetail:
@@ -264,6 +270,7 @@ async def get_channel_editor_on_twitch(
     response_model=TwitchFollowedChannelsDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_user_followed_channels(
     user_id: str, token: str
 ) -> TwitchFollowedChannelsDetail:
@@ -294,6 +301,7 @@ async def get_user_followed_channels(
     response_model=TwitchChannelFollowersDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_channel_followers_on_twitch(
     broadcaster_id: str, token: str
 ) -> TwitchChannelFollowersDetail:
@@ -327,6 +335,7 @@ async def get_channel_followers_on_twitch(
     response_model=TwitchChannelEmotesDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_channel_emotes_on_twitch(
     broadcaster_id: str, token: str
 ) -> TwitchChannelEmotesDetail:
@@ -389,6 +398,7 @@ async def get_chat_settings_on_twitch(
     response_model=TwitchVIPPersonChannelDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_vip_persons_on_twitch(
     broadcaster_id: str, token: str
 ) -> TwitchVIPPersonChannelDetail:
@@ -421,6 +431,7 @@ async def get_vip_persons_on_twitch(
     response_model=TwitchGlobalEmotesDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_global_emotes_on_twitch(token: str) -> TwitchGlobalEmotesDetail:
     """
     Endpoint which get global emotes
@@ -447,6 +458,7 @@ async def get_global_emotes_on_twitch(token: str) -> TwitchGlobalEmotesDetail:
     response_model=TwitchClipsDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_clips_on_twitch(
     broadcaster_id: str, token: str
 ) -> TwitchClipsDetail:
@@ -475,6 +487,7 @@ async def get_clips_on_twitch(
     response_model=TwitchPoolsDetail,
     tags=["Twitch Actions"],
 )
+@cache()
 async def get_pools_on_twitch(
     broadcaster_id: str, token: str
 ) -> TwitchPoolsDetail:

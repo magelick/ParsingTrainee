@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 from fastapi.responses import ORJSONResponse
 from pymongo.client_session import ClientSession
 from starlette import status
@@ -16,6 +16,8 @@ from core.dependencies import (
     get_db_session,
     get_data_from_topic,
     check_data_on_exits_into_db,
+    background_tasks,
+    count_objects_in_topic,
 )
 
 # lamoda db router
@@ -33,15 +35,19 @@ router = APIRouter(
 )
 async def get_list_sneakers_from_db(
     session: ClientSession = get_db_session,
+    tasks: BackgroundTasks = background_tasks,
 ) -> List:
     """
     Endpoint which get list sneakers from db
     :return:
     """
+    # get valid data from topic
     topic_data = get_data_from_topic(topic_name="lamoda-list-sneakers-topic")
+    # check data on exits into db
     check_data_on_exits_into_db(
         data=topic_data, collection=lamoda_list_sneakers, session=session
     )
+    tasks.add_task(count_objects_in_topic, collection=lamoda_list_sneakers)
     return get_all_doc_form_collection(collection=lamoda_list_sneakers)
 
 
@@ -52,16 +58,24 @@ async def get_list_sneakers_from_db(
 )
 async def get_list_sneaker_hrefs_from_db(
     session: ClientSession = get_db_session,
+    tasks: BackgroundTasks = background_tasks,
 ) -> List:
     """
     Endpoint which get list sneaker hrefs from db
     :return:
     """
+    # get valid data from topic
     topic_data = get_data_from_topic(
         topic_name="lamoda-list-sneaker-hrefs-topic"
     )
+    # check data on exits into db
     check_data_on_exits_into_db(
-        data=topic_data, collection=lamoda_list_sneaker_hrefs, session=session
+        data=topic_data,
+        collection=lamoda_list_sneaker_hrefs,
+        session=session,
+    )
+    tasks.add_task(
+        count_objects_in_topic, collection=lamoda_list_sneaker_hrefs
     )
     return get_all_doc_form_collection(collection=lamoda_list_sneaker_hrefs)
 
@@ -73,15 +87,19 @@ async def get_list_sneaker_hrefs_from_db(
 )
 async def get_list_sneaker_detail_from_db(
     session: ClientSession = get_db_session,
+    tasks: BackgroundTasks = background_tasks,
 ) -> List:
     """
     Endpoint which get list sneaker details from db
     :return:
     """
+    # get valid data from topic
     topic_data = get_data_from_topic(topic_name="lamoda-sneaker-topic")
+    # check data on exits into db
     check_data_on_exits_into_db(
         data=topic_data, collection=lamoda_sneaker_detail, session=session
     )
+    tasks.add_task(count_objects_in_topic, collection=lamoda_sneaker_detail)
     return get_all_doc_form_collection(collection=lamoda_sneaker_detail)
 
 

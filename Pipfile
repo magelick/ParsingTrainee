@@ -23,6 +23,7 @@ pytest-asyncio = "*"
 pytest-mongodb = "*"
 six = "*"
 pykafka = "*"
+fastapi-cache2 = {extras = ["redis"], version = "*"}
 
 [dev-packages]
 

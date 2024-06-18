@@ -1,32 +1,11 @@
 #version: "3.9"  # version
 
 services:  # all services
-  web:  # app service
-    build:  # Dockerfile
-      context: .  # where locating
-      dockerfile: Dockerfile  # what name for this file
-    container_name: "web"  # name service (container)
-    ports:  # service (container) ports
-      - "8002:8002"
-    logging:  # service (container) logs
-      options:  # option for log
-        max-size: '500M'  # max size log files
-        max-file: '5'  # max count of files
-    env_file:  # .env file with environments
-      - ./.env
-    command: uvicorn app:app --host 0.0.0.0 --port 8002 --reload # command for start work
-    restart: always  # always restart service (container) if his breakdown
-    volumes:  # connection your app's with workdir of service (container)
-      - .:/app
-    depends_on:  # what services (containers) this container depends on
-      - mongodb
-      - kafka
-
-  twitch_web: # twitch app service
+  web: # twitch app service
     build: # Dockerfile
       context: .  # where locating
       dockerfile: Dockerfile  # what name for this file
-    container_name: "twitch_web"  # name service (container)
+    container_name: "web"  # name service (container)
     ports: # service (container) ports
       - "8001:8001"
     logging: # service (container) logs
@@ -41,7 +20,7 @@ services:  # all services
       - .:/app
     depends_on: # what services (containers) this container depends on
       - mongodb
-      - kafka
+      - redis
 
   mongodb: # mongodb service
     image: mongo:latest  # what image use for this service (container)
@@ -57,6 +36,12 @@ services:  # all services
 #        source: ./data
 #        target: /data/db
 
+  redis: # redis service
+    image: redis:7.2.4-alpine3.19  # what image use for this service (container)
+    container_name: "web-redis"   # service (container) name
+    hostname: redis  # hostname
+    restart: always  # always restart service (container) if his breakdown
+
   zookeeper:  # zookeeper service
     image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper  # hostname
@@ -71,6 +56,7 @@ services:  # all services
     container_name: "web-broker"  # service (container) name
     ports:  # service (container) ports
       - "9092:9092"
+    restart: always
     env_file:  # .env file with environments
       - ./.env
     depends_on:

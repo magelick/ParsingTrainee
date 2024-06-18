@@ -1,5 +1,6 @@
 import requests
 from pydantic import Json
+
 from core.settings import SETTINGS
 
 
