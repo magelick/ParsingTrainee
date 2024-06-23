@@ -137,6 +137,7 @@ def get_producer_and_consumer():
         consumer = SimpleConsumer(
             topic=topic_obj,
             cluster=kafka_client.cluster,
+            consumer_timeout_ms=1,
             auto_offset_reset=OffsetType.LATEST,
             consumer_group="my_group",
         )

@@ -1,7 +1,11 @@
 import pytest
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from redis.client import Redis  # type: ignore
 from starlette.testclient import TestClient
 
 from app import app as FastAPP
+from core.settings import SETTINGS
 
 # Initial APIClient
 client = TestClient(FastAPP)
@@ -13,12 +17,14 @@ def get_access_token():
     Fixture which get access token from twitch user credentials
     :return:
     """
-    authorize_code = "x2lxvytraf2b8p3lwvwm5pq7m5jght"
+    authorize_code = "q6elrrgn40h7iowj6w6fryw5v5vaiu"
     url = f"http://0.0.0.0:8002/api/v1/twitch/auth/{authorize_code}"
 
-    response = client.get(url)
+    response = client.get(url).json()
 
-    return response.json().get("access_token")
+    access_token = response.get("access_token")
+
+    return access_token
 
 
 @pytest.fixture(scope="session")
@@ -33,3 +39,9 @@ def get_user_id(get_access_token):
     user_data = user.get("data")
 
     return user_data[0].get("id")
+
+
+@pytest.fixture(scope="session")
+def get_init_cache():
+    redis = Redis.from_url(SETTINGS.REDIS_URL.unicode_string())
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache", expire=60)

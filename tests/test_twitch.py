@@ -14,7 +14,7 @@ async def test_authorize():
 @pytest.mark.asyncio
 async def test_get_twitch_tokens():
     base_url = "http://0.0.0.0:8002/api/v1/twitch/auth/"
-    authorize_code = "mm44wdfpbnj284l7qq7lfj1xhfhnge"
+    authorize_code = "anh5muynnhhm1zgbz0yf19jglzb05b"
     url = f"{base_url}{authorize_code}"
 
     response = client.get(url)
